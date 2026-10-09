@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b10">
+  <title>Unmasked · Smudge Reveal</title>
+  <meta name="description" content="Move your pointer across the scene and the day image tears away, uncovering the hidden night scene.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ff2d3d'/%3E%3C/svg%3E">
+  <link rel="preload" as="image" href="img/day.webp" type="image/webp">
+  <link rel="preload" as="image" href="img/night.webp" type="image/webp">
+  <link rel="stylesheet" href="css/style.css">
+  <noscript><style>.loader{display:none}.reveal{display:none}</style></noscript>
+</head>
+<body>
+
+<main class="stage" id="stage" tabindex="0"
+      aria-label="Interactive image. Move your pointer, or touch and drag, to smear the day scene away and uncover the hidden night scene.">
+
+  <!-- Bottom layer: the "day" scene -->
+  <picture class="layer base">
+    <source srcset="img/day.webp" type="image/webp">
+    <img src="img/day.jpg" width="1672" height="941" alt="A smiling young man in a navy varsity jacket sitting at a laptop in a bright room." draggable="false" decoding="async">
+  </picture>
+
+  <!-- The reveal: night scene painted through a torn, lingering stroke -->
+  <canvas class="reveal" id="reveal" aria-hidden="true"></canvas>
+
+  <div class="vignette" aria-hidden="true"></div>
+
+  <section class="copy">
+    <p class="label"><span class="l-mouse">Hover to reveal</span><span class="l-touch">Touch &amp; drag to reveal</span></p>
+    <h1 class="headline">
+      <span class="h h-idle">Ordinary by day.</span>
+      <span class="h h-active">Unmasked after dark.</span>
+    </h1>
+    <p class="blurb">Move the pointer — or drag on touch — and the night scene smudges out from under the cursor.</p>
+  </section>
+
+  <div class="loader" aria-hidden="true"><span></span></div>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
