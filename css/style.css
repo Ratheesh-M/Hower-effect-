@@ -1,0 +1,159 @@
+:root {
+  --bg: #0b0b10;
+  --red: #ff2d3d;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Stage ---------- */
+.stage {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: crosshair;
+  outline: none;
+}
+.stage:focus-visible { box-shadow: inset 0 0 0 3px var(--red); }
+
+.layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.layer picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.layer img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+
+/* The reveal: a full-stage canvas holding the night scene, cut by a hard,
+   torn-edged stroke that lingers and then erodes away. */
+.reveal {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(100deg, rgba(0, 0, 0, .66) 0%, rgba(0, 0, 0, .44) 28%,
+                    rgba(0, 0, 0, .1) 52%, transparent 68%),
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0, 0, 0, .3) 100%),
+    linear-gradient(to top, rgba(0, 0, 0, .34), transparent 38%);
+}
+
+/* ---------- Copy ----------
+   Sits over both scenes, so it inverts against whatever is behind it
+   and stays readable as the night image smears underneath. */
+.copy {
+  position: absolute;
+  left: var(--gap, clamp(18px, 4vw, 56px));
+  bottom: clamp(26px, 6vh, 64px);
+  width: min(520px, calc(100% - 36px));
+  color: #fff;
+  pointer-events: none;
+  text-shadow: 0 2px 26px rgba(0, 0, 0, .45);
+}
+
+.label {
+  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  opacity: .85;
+}
+
+.l-touch { display: none; }
+@media (hover: none) {
+  .l-mouse { display: none; }
+  .l-touch { display: inline; }
+}
+
+.headline {
+  margin: 0 0 14px;
+  display: grid;
+  font-size: clamp(1.9rem, 5.2vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -.03em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.h {
+  will-change: opacity, transform;
+  grid-area: 1 / 1;
+  transition: opacity .45s var(--ease), transform .6s var(--ease), filter .45s var(--ease);
+}
+.h-active { opacity: 0; transform: translateY(.4em); filter: blur(7px); }
+.stage[data-state="active"] .h-idle   { opacity: 0; transform: translateY(-.4em); filter: blur(7px); }
+.stage[data-state="active"] .h-active { opacity: 1; transform: none; filter: none; }
+
+.blurb {
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(.88rem, 1.6vw, 1.02rem);
+  line-height: 1.5;
+  font-weight: 500;
+  opacity: .92;
+}
+
+/* ---------- Loader ---------- */
+.loader {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  z-index: 10;
+  transition: opacity .7s var(--ease), visibility .7s;
+}
+.loader span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .15);
+  border-top-color: var(--red);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.stage.ready .loader { opacity: 0; visibility: hidden; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+}
